@@ -70,46 +70,43 @@ const userController = {
     }
   },
 
-  // Add an assignment to a student
-  async addAssignment(req, res) {
+  // Delete user
+  async deleteUser(req, res) {
     try {
-      console.log('You are adding an assignment');
-      console.log(req.body);
-      const student = await Student.findOneAndUpdate(
-        { _id: req.params.studentId },
-        { $addToSet: { assignments: req.body } },
-        { runValidators: true, new: true }
-      );
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
 
-      if (!student) {
-        return res
-          .status(404)
-          .json({ message: 'No student found with that ID :(' })
+      if (!user) {
+        return res.status(404).json({ message: "No user with that ID" });
       }
 
-      res.json(student);
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+      return res.status(200).json({
+        message: "User and associated thoughts and reactions deleted!",
+      });
     } catch (err) {
-      res.status(500).json(err);
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
-  // Remove assignment from a student
-  async removeAssignment(req, res) {
-    try {
-      const student = await Student.findOneAndUpdate(
-        { _id: req.params.studentId },
-        { $pull: { assignment: { assignmentId: req.params.assignmentId } } },
-        { runValidators: true, new: true }
-      );
+// Delete friend
+async deleteFriend(req, res) {
+  try {
+    const friend = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.friendId } },
+      { runValidators: true, new: true }
+    );
 
-      if (!student) {
-        return res
-          .status(404)
-          .json({ message: 'No student found with that ID :(' });
-      }
-
-      res.json(student);
-    } catch (err) {
-      res.status(500).json(err);
+    if (!friend) {
+      return res.status(404).json({ message: "Check user and friend ID" });
     }
-  },
+
+    return res.status(200).json(friend);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+},
 };
+
+module.exports = userController;
