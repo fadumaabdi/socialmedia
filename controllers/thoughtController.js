@@ -1,31 +1,31 @@
-const { Course, Student } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
-  // Get all courses
-  async getCourses(req, res) {
+  // Get all thoughts
+  async getAllThought(req, res) {
     try {
-      const courses = await Course.find();
-      res.json(courses);
+      const thoughts = await Thought.find();
+      res.json(thoughts);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Get a course
-  async getSingleCourse(req, res) {
+  // Get a thought
+  async getThoughtById(req, res) {
     try {
-      const course = await Course.findOne({ _id: req.params.courseId })
+      const thought = await Thought.findOne({ _id: req.params.thoughtId })
         .select('-__v');
 
-      if (!course) {
-        return res.status(404).json({ message: 'No course with that ID' });
+      if (!thought) {
+        return res.status(404).json({ message: 'No thought with that ID' });
       }
 
-      res.json(course);
+      res.json(thought);
     } catch (err) {
       res.status(500).json(err);
     }
   },
-  // Create a course
+  // Create a thought
   async createCourse(req, res) {
     try {
       const course = await Course.create(req.body);
