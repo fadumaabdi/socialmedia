@@ -3,6 +3,7 @@ const {
   getAllUser,
   getUserById,
   createUser,
+  updateUser,
   deleteUser,
   addFriend,
   removeFriend,
@@ -12,10 +13,10 @@ const {
 router.route('/').get(getAllUser).post(createUser);
 
 // /api/users/:userId
-router.route('/:id').get(getUserById).put(updateUser).delete(deleteUser);
+router.route('/:userid').get(getUserById).put(updateUser).delete(deleteUser);
 
 
 // /api/users/:userId/friends/:friendId
-router.route('/:userId/friends/:friendIdId').post(addFriend).delete(removeFriend);
+router.route('/:userId/friends/:friendId').post(addFriend).delete(removeFriend);
 
 module.exports = router;
