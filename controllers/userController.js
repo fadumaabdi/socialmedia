@@ -5,7 +5,7 @@ const { User, Thought } = require('../models');
 
 // Get all users
 const userController = {
-  async getUsers(req, res) {
+  async getAllUser(req, res) {
     try {
       const users = await User.find()
 
@@ -20,7 +20,7 @@ const userController = {
   },
 
   // Get single user
-  async getUser(req, res) {
+  async getUserById(req, res) {
     try {
       const user = await User.findOne({ _id: req.params.userId })
 
@@ -48,31 +48,25 @@ const userController = {
       return res.status(500).json(err);
     }
   },
-  // Delete a student and remove them from the course
-  async deleteStudent(req, res) {
+
+  
+  
+  // Delete user
+  async deleteUser(req, res) {
     try {
-      const student = await Student.findOneAndRemove({ _id: req.params.studentId });
+      const user = await User.findOneAndDelete({ _id: req.params.userId });
 
-      if (!student) {
-        return res.status(404).json({ message: 'No such student exists' })
+      if (!user) {
+        return res.status(404).json({ message: "No user with that ID" });
       }
 
-      const course = await Course.findOneAndUpdate(
-        { students: req.params.studentId },
-        { $pull: { students: req.params.studentId } },
-        { new: true }
-      );
-
-      if (!course) {
-        return res.status(404).json({
-          message: 'Student deleted, but no courses found',
-        });
-      }
-
-      res.json({ message: 'Student successfully deleted' });
+      await Thought.deleteMany({ _id: { $in: user.thoughts } });
+      return res.status(200).json({
+        message: "User and linked thoughts and reactions deleted!",
+      });
     } catch (err) {
       console.log(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 
