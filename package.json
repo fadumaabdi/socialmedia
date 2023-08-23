@@ -1,6 +1,8 @@
 {
   "name": "socialmedia",
   "version": "1.0.1",
+  "engines": {
+    "node": "18.16"},
   "description": "Mongoose back-end project - Develop",
   "main": "index.js",
   "license": "MIT",
