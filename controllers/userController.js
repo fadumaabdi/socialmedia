@@ -1,65 +1,43 @@
 // ObjectId() method for converting studentId string into an ObjectId for querying database
 const { ObjectId } = require('mongoose').Types;
-const { Student, Course } = require('../models');
+const { User, Thought } = require('../models');
 
-// TODO: Create an aggregate function to get the number of students overall
-const headCount = async () => {
-  // Your code here
-  const numberOfStudents = await Student.aggregate();
-  return numberOfStudents;
-}
 
-// Execute the aggregate method on the Student model and calculate the overall grade by using the $avg operator
-const grade = async (studentId) =>
-  Student.aggregate([
-    // TODO: Ensure we include only the student who can match the given ObjectId using the $match operator
-    {
-      // Your code here
-    },
-    {
-      $unwind: '$assignments',
-    },
-    // TODO: Group information for the student with the given ObjectId alongside an overall grade calculated using the $avg operator
-    {
-      // Your code here
-    },
-  ]);
-
-module.exports = {
-  // Get all students
-  async getStudents(req, res) {
+// Get all users
+const userController = {
+  async getUsers(req, res) {
     try {
-      const students = await Student.find();
-      const studentObj = {
-        students,
-        headCount: await headCount(),
-      };
-      return res.json(studentObj);
+      const users = await User.find()
+
+        .populate({ path: "thoughts", select: "-__v" })
+        .populate({ path: "friends", select: "-__v" });
+
+      return res.status(200).json(users);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
     }
   },
-  // Get a single student
-  async getSingleStudent(req, res) {
-    try {
-      const student = await Student.findOne({ _id: req.params.studentId })
-        .select('-__v')
-        .lean();
 
-      if (!student) {
-        return res.status(404).json({ message: 'No student with that ID' });
+  // Get single user
+  async getUser(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId })
+
+        .populate({ path: "thoughts", select: "-__v" })
+        .populate({ path: "friends", select: "-__v" });
+
+      if (!user) {
+        return res.status(404).json({ message: "No user with that ID" });
       }
 
-      res.json({
-        student,
-        grade: await grade(req.params.studentId),
-      });
+      return res.status(200).json(user);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
     }
   },
+
   // create a new student
   async createStudent(req, res) {
     try {
