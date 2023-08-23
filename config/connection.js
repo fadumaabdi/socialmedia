@@ -1,10 +1,12 @@
-const { connect, connection } = require('mongoose');
+// Imports
+const { connect, connection } = require("mongoose");
 
-//connection parameters to socialNetwork database
-connect('mongodb://localhost/socialNetwork', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Creates database
+const connectionString =
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/studentsDB";
 
-//export the connection
+// Connects Mongoose and MongoDB
+connect(connectionString);
+
+// Exports
 module.exports = connection;
