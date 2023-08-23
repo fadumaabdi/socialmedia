@@ -26,10 +26,10 @@ module.exports = {
     }
   },
   // Create a thought
-  async createCourse(req, res) {
+  async createThought(req, res) {
     try {
-      const course = await Course.create(req.body);
-      res.json(course);
+      const thought = await Thought.create(req.body);
+      res.json(thought);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
