@@ -38,13 +38,14 @@ const userController = {
     }
   },
 
-  // create a new student
-  async createStudent(req, res) {
+  // Create user
+  async createUser(req, res) {
     try {
-      const student = await Student.create(req.body);
-      res.json(student);
+      const user = await User.create(req.body);
+      return res.status(200).json(user);
     } catch (err) {
-      res.status(500).json(err);
+      console.log(err);
+      return res.status(500).json(err);
     }
   },
   // Delete a student and remove them from the course
