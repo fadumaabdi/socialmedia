@@ -32,7 +32,7 @@ To start the server run the command npm server in the terminal root directory.
 
 # Application Preview
 
-[Click here to access the application recording.]
+[Click here to access the application recording.](https://drive.google.com/file/d/1l_LYC6k5I2JoX_eZrbAZM2FJC9R7P_bC/view)
 
 # Links
 
