@@ -113,6 +113,6 @@ module.exports = {
   },
 };
 
-
+module.exports = thoughtsController;
 
 
